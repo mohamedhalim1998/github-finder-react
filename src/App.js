@@ -1,25 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
-
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import { Component } from "react";
+import "./App.css";
+import Navbar from "./components/Navbar";
+import User from "./components/User";
+class App extends Component {
+  state = {
+    users: [],
+    loading: false,
+  };
+  async componentDidMount() {
+    let users = await (await fetch("https://api.github.com/users")).json();
+    console.log(users);
+    this.setState({users: users, loading: false})
+  }
+  render() {
+    return (
+      <div className="App">
+        <Navbar />
+        <div className="container">
+        <User users={this.state.users}></User>
+        </div>
+      </div>
+    );
+  }
 }
 
 export default App;
