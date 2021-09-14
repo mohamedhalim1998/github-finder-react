@@ -1,7 +1,7 @@
 import React from "react";
 import UserItem from "./UserItem";
 
-export default function User({ users }) {
+export default function Users({ users }) {
   return (
     <div style={gridStyle}>
       {users.map((user) => (
