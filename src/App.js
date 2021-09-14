@@ -10,6 +10,7 @@ class App extends Component {
     users: [],
     loading: false,
     user: {},
+    repos: [],
   };
   searchUsers = async (text) => {
     let users = await (
@@ -21,15 +22,21 @@ class App extends Component {
     this.setState({ users: users.items, loading: false });
   };
   getUser = async (username) => {
-
-    const res = await (
+    const user = await (
       await fetch(
         `https://api.github.com/users/${username}?client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}`
       )
     ).json();
-    console.log(res)
 
-    this.setState({ user: res});
+    const repos = await (
+      await fetch(
+        `https://api.github.com/users/${username}/repos?per_page=5?client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}`
+      )
+    ).json();
+    console.log(repos);
+
+    this.setState({ user: user });
+    this.setState({ repos: repos });
   };
 
   render() {
@@ -38,24 +45,25 @@ class App extends Component {
         <div className="App">
           <Navbar />
           <Switch>
-            <Route exact path="/">
-              <div className="container">
+            <div className="container">
+              <Route exact path="/">
                 <SearchBar search={this.searchUsers} />
 
                 <Users users={this.state.users}></Users>
-              </div>
-            </Route>
-            <Route
-              exact
-              path="/user/:login"
-              render={(props) => (
-                <User
-                  {...props}
-                  getUser={this.getUser}
-                  user={this.state.user}
-                ></User>
-              )}
-            ></Route>
+              </Route>
+              <Route
+                exact
+                path="/user/:login"
+                render={(props) => (
+                  <User
+                    {...props}
+                    getUser={this.getUser}
+                    user={this.state.user}
+                    repos={this.state.repos}
+                  ></User>
+                )}
+              ></Route>
+            </div>
           </Switch>
         </div>
       </Router>

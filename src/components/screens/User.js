@@ -1,6 +1,6 @@
 import React, { Fragment, Component } from 'react';
 import { Link } from 'react-router-dom';
-
+import { Repos } from '../Repos';
 export class User extends Component {
   componentDidMount() {
     this.props.getUser(this.props.match.params.login);
@@ -89,6 +89,7 @@ export class User extends Component {
           <div className='badge badge-light'>Public Repos: {public_repos}</div>
           <div className='badge badge-dark'>Public Gists: {public_gists}</div>
         </div>
+        <Repos repos={this.props.repos} className="text-center" />
       </Fragment>
     );
   }
